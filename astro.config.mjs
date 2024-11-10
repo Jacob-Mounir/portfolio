@@ -6,5 +6,5 @@ export default defineConfig({
   site: 'https://jacob-mounir.github.io',
   base: '/portfolio',
   integrations: [tailwind(), react()],
-  output: 'static',
+  output: 'static'
 });
