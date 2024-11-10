@@ -3,6 +3,7 @@ const { title, description, image } = Astro.props;
 import BaseHead from "../components/BaseHead.astro";
 ---
 
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <BaseHead {title} {description} {image} />
@@ -15,6 +16,6 @@ import BaseHead from "../components/BaseHead.astro";
   <body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 relative">
     <div class="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px] pointer-events-none"></div>
     <slot />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
   </body>
 </html>

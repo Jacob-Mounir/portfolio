@@ -1,5 +1,13 @@
 ---
 // src/components/landing/Structure.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import projects from "../../data/projects.js";
 import quotes from "../../data/quotes";
 ---
+
+<BaseLayout
+  title="Jacob Mounir | Portfolio"
+  description="Welcome to my portfolio website"
+>
+  <slot />
+</BaseLayout>

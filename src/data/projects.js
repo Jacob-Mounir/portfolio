@@ -1,6 +1,6 @@
 const projects = [
 	{
-		image: '/public/images/oasis.png',
+		image: '/portfolio/images/oasis.png',
 		title: 'Oasis ',
 		lang: 'React, CSS, UI/UX',
 		description: 'Group Project for a fine dining restaurant',
@@ -8,7 +8,7 @@ const projects = [
 	},
 
 	{
-		image: '/public/images/masafejuja.png',
+		image: '/portfolio/images/masafejuja.png',
 		title: 'Fine Dining Restaurant',
 		lang: 'React, CSS, UI/UX',
 		description: 'School project for a fine dining restaurant',
@@ -16,7 +16,7 @@ const projects = [
 	},
 
 	{
-		image: '/public/images/clouds.png',
+		image: '/portfolio/images/clouds.png',
 		title: 'Clouds',
 		lang: 'UI/UX, Figma',
 		description: 'Short info about',
@@ -24,7 +24,7 @@ const projects = [
 	},
 
 	{
-		image: '/public/images/pokemon.jpg',
+		image: '/portfolio/images/pokemon.jpg',
 		title: 'Pokémon Team Manager',
 		lang: 'HTML, CSS & JavaScript',
 		description: 'Short info about',
