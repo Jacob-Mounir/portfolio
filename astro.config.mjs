@@ -3,8 +3,8 @@ import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 
 export default defineConfig({
-  site: 'https://jacob-mounir.github.io',
-  base: '/portfolio',
+  site: 'https://yourusername.github.io',
+  base: '/your-repo-name',
   integrations: [tailwind(), react()],
   output: 'static'
 });
