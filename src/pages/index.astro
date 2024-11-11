@@ -1,11 +1,9 @@
 ---
 // src/pages/index.astro
-import Structure from '../components/landing/Structure.astro';
-import projects from '../data/projects.js';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Structure from "../components/landing/Structure.astro";
 ---
 
-<Structure>
-  <main class="container mx-auto px-4">
-    {/* The projects are now handled in Structure.astro */}
-  </main>
-</Structure>
+<BaseLayout>
+  <Structure />
+</BaseLayout>

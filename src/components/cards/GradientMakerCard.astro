@@ -1,0 +1,227 @@
+---
+import CardWrapper from '../ui/CardWrapper.astro';
+---
+
+<CardWrapper>
+  <div class="flex flex-col h-full">
+    <div class="flex justify-between items-start mb-4">
+      <h2 class="text-2xl font-bold text-primary dark:text-white">
+        Gradient Maker
+      </h2>
+
+      <!-- Theme Toggle -->
+      <div class="theme-toggle scale-75 origin-right">
+        <input type="checkbox" id="darkmode-toggle" />
+        <label for="darkmode-toggle" class="cursor-pointer">
+          <svg class="sun" viewBox="0 0 24 24">
+            <path d="M12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"></path>
+          </svg>
+          <svg class="moon" viewBox="0 0 24 24">
+            <path d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path>
+          </svg>
+        </label>
+      </div>
+    </div>
+
+    <div class="gradient-preview w-full h-32 rounded-xl mb-4"></div>
+
+    <div class="flex gap-4 mb-4">
+      <div class="flex-1">
+        <label class="text-sm text-primary dark:text-white mb-2 block">Color 1</label>
+        <input type="color" id="color1" value="#FF0080" class="w-full h-10 rounded-lg cursor-pointer">
+      </div>
+      <div class="flex-1">
+        <label class="text-sm text-primary dark:text-white mb-2 block">Color 2</label>
+        <input type="color" id="color2" value="#7928CA" class="w-full h-10 rounded-lg cursor-pointer">
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="text-sm text-primary dark:text-white mb-2 block">Direction</label>
+      <select id="direction" class="w-full p-2 rounded-lg bg-zinc-100 dark:bg-tertiary text-primary dark:text-white border border-zinc-200 dark:border-zinc-700">
+        <option value="to right">→ To Right</option>
+        <option value="to left">← To Left</option>
+        <option value="to bottom">↓ To Bottom</option>
+        <option value="to top">↑ To Top</option>
+        <option value="to bottom right">↘ To Bottom Right</option>
+        <option value="to bottom left">↙ To Bottom Left</option>
+        <option value="to top right">↗ To Top Right</option>
+        <option value="to top left">↖ To Top Left</option>
+      </select>
+    </div>
+
+    <div class="flex gap-2">
+      <button
+        id="copyButton"
+        class="flex-1 px-4 py-2 rounded-lg bg-primary dark:bg-white text-white dark:text-primary text-sm font-medium hover:opacity-90 transition-opacity"
+      >
+        Copy CSS
+      </button>
+      <button
+        id="applyButton"
+        class="flex-1 px-4 py-2 rounded-lg bg-primary dark:bg-white text-white dark:text-primary text-sm font-medium hover:opacity-90 transition-opacity"
+      >
+        Apply to Page
+      </button>
+    </div>
+
+    <input
+      type="text"
+      id="gradientCode"
+      readonly
+      class="mt-4 w-full p-3 rounded-lg bg-zinc-100 dark:bg-tertiary text-primary dark:text-white font-mono text-sm"
+      style="display: none;"
+    />
+  </div>
+</CardWrapper>
+
+<style>
+  /* Gradient Maker styles */
+  input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    padding: 0;
+    background: transparent;
+  }
+
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 8px;
+  }
+
+  /* Theme toggle styles - with more specific selectors */
+  .theme-toggle #darkmode-toggle {
+    display: none;
+  }
+
+  .theme-toggle label {
+    background: #f1f1f1;
+    width: 120px;
+    height: 50px;
+    border-radius: 100px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    overflow: hidden;
+  }
+
+  .theme-toggle .sun {
+    width: 35px;
+    height: 35px;
+    fill: #ffd43b;
+    transform: translateX(0);
+    transition: all 0.3s ease;
+  }
+
+  .theme-toggle .moon {
+    width: 35px;
+    height: 35px;
+    fill: #f1f1f1;
+    position: absolute;
+    right: 8px;
+    transform: translateX(100px);
+    transition: all 0.3s ease;
+  }
+
+  .theme-toggle #darkmode-toggle:checked + label {
+    background: #374151;
+    border-color: #374151;
+  }
+
+  .theme-toggle #darkmode-toggle:checked + label .sun {
+    transform: translateX(-100px);
+  }
+
+  .theme-toggle #darkmode-toggle:checked + label .moon {
+    transform: translateX(0);
+  }
+
+  /* Dark mode styles */
+  :global(.dark) .theme-toggle label {
+    background: #374151;
+    border-color: #374151;
+  }
+
+  :global(.dark) .theme-toggle .sun {
+    transform: translateX(-100px);
+  }
+
+  :global(.dark) .theme-toggle .moon {
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  const color1Input = document.getElementById('color1') as HTMLInputElement;
+  const color2Input = document.getElementById('color2') as HTMLInputElement;
+  const directionSelect = document.getElementById('direction') as HTMLSelectElement;
+  const gradientPreview = document.querySelector('.gradient-preview') as HTMLElement;
+  const gradientCode = document.getElementById('gradientCode') as HTMLInputElement;
+  const copyButton = document.getElementById('copyButton') as HTMLButtonElement;
+  const applyButton = document.getElementById('applyButton') as HTMLButtonElement;
+
+  function updateGradient() {
+    const gradient = `linear-gradient(${directionSelect.value}, ${color1Input.value}, ${color2Input.value})`;
+    gradientPreview.style.background = gradient;
+    gradientCode.value = `background: ${gradient};`;
+    return gradient;
+  }
+
+  color1Input.addEventListener('input', updateGradient);
+  color2Input.addEventListener('input', updateGradient);
+  directionSelect.addEventListener('change', updateGradient);
+
+  copyButton.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(gradientCode.value);
+      copyButton.textContent = 'Copied!';
+      setTimeout(() => {
+        copyButton.textContent = 'Copy CSS';
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  });
+
+  applyButton.addEventListener('click', () => {
+    const gradient = updateGradient();
+    document.body.style.background = gradient;
+    applyButton.textContent = 'Applied!';
+    setTimeout(() => {
+      applyButton.textContent = 'Apply to Page';
+    }, 2000);
+  });
+
+  // Initialize gradient
+  updateGradient();
+
+  // Theme toggle script
+  const themeToggle = document.getElementById('darkmode-toggle') as HTMLInputElement;
+
+  if (themeToggle) {
+    themeToggle.addEventListener('change', () => {
+      if (themeToggle.checked) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    // Set initial state
+    if (localStorage.getItem('theme') === 'dark' ||
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      themeToggle.checked = true;
+      document.documentElement.classList.add('dark');
+    }
+  }
+</script>

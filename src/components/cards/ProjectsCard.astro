@@ -1,0 +1,211 @@
+---
+import CardWrapper from "../ui/CardWrapper.astro";
+import { projects } from "../../data/projects";
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<CardWrapper
+  class="lg:row-span-2 lg:col-span-2 flex flex-col justify-between group no-tilt"
+>
+  <div class="flex flex-col h-full">
+    <div class="flex items-center justify-between mb-6">
+      <h2
+        class="text-5xl font-medium tracking-tight text-primary dark:text-white"
+      >
+        Projects
+      </h2>
+      <div class="flex gap-2">
+        <button
+          class="prev-project p-2 rounded-full hover:bg-zinc-100/20 dark:hover:bg-tertiary transition-colors duration-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-primary dark:text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button
+          class="next-project p-2 rounded-full hover:bg-zinc-100/20 dark:hover:bg-tertiary transition-colors duration-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-primary dark:text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="project-container flex-grow relative">
+      <div class="project-content">
+        <h3
+          class="text-2xl font-medium text-primary dark:text-white mb-4 project-title"
+        >
+        </h3>
+        <a
+          href="#"
+          class="project-link block relative aspect-video mb-4 overflow-hidden rounded-xl group/image"
+        >
+          <img
+            class="project-image w-full h-full object-cover transition-transform duration-300 group-hover/image:scale-105"
+            src=""
+            alt=""
+          />
+          <div
+            class="absolute inset-0 bg-black/0 group-hover/image:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover/image:opacity-100"
+          >
+            <span
+              class="text-white font-medium px-4 py-2 rounded-lg bg-black/50"
+              >View Project</span
+            >
+          </div>
+        </a>
+        <div class="space-y-4">
+          <p class="text-zinc-500 dark:text-zinc-400 project-description"></p>
+          <div class="flex items-center justify-between">
+            <div class="flex flex-wrap gap-2 project-tech-container">
+              <!-- Technologies will be inserted here by JavaScript -->
+            </div>
+            <a
+              href="#"
+              class="project-link-btn inline-flex items-center text-sm font-semibold text-primary dark:text-white hover:text-primary/70 dark:hover:text-white/70"
+            >
+              View Project
+              <svg
+                class="ml-2 w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="mt-6 h-1 bg-zinc-100/20 dark:bg-tertiary rounded-full overflow-hidden"
+    >
+      <div
+        class="project-progress h-full bg-primary dark:bg-white transition-all duration-300"
+        style="width: 0%"
+      >
+      </div>
+    </div>
+  </div>
+</CardWrapper>
+
+<script define:vars={{ projects, baseUrl }}>
+  let currentProjectIndex = 0;
+
+  const techColors = {
+    'React': {
+      bg: 'bg-blue-900/10 dark:bg-blue-400/10',
+      text: 'text-blue-900 dark:text-blue-400',
+      border: 'border-blue-900/20 dark:border-blue-400/20',
+    },
+    'CSS': {
+      bg: 'bg-pink-900/10 dark:bg-pink-400/10',
+      text: 'text-pink-900 dark:text-pink-400',
+      border: 'border-pink-900/20 dark:border-pink-400/20',
+    },
+    'UI/UX': {
+      bg: 'bg-purple-900/10 dark:bg-purple-400/10',
+      text: 'text-purple-900 dark:text-purple-400',
+      border: 'border-purple-900/20 dark:border-purple-400/20',
+    },
+    'HTML': {
+      bg: 'bg-orange-900/10 dark:bg-orange-400/10',
+      text: 'text-orange-900 dark:text-orange-400',
+      border: 'border-orange-900/20 dark:border-orange-400/20',
+    },
+    'JavaScript': {
+      bg: 'bg-yellow-900/10 dark:bg-yellow-400/10',
+      text: 'text-yellow-900 dark:text-yellow-400',
+      border: 'border-yellow-900/20 dark:border-yellow-400/20',
+    },
+    'Figma': {
+      bg: 'bg-green-900/10 dark:bg-green-400/10',
+      text: 'text-green-900 dark:text-green-400',
+      border: 'border-green-900/20 dark:border-green-400/20',
+    },
+  };
+
+  function updateProject(index) {
+    const project = projects[index];
+    const titleEl = document.querySelector(".project-title");
+    const descEl = document.querySelector(".project-description");
+    const imgEl = document.querySelector(".project-image");
+    const linkEls = document.querySelectorAll(".project-link");
+    const linkBtnEl = document.querySelector(".project-link-btn");
+    const progressEl = document.querySelector(".project-progress");
+
+    if (titleEl) titleEl.textContent = project.title;
+    if (descEl) descEl.textContent = project.description;
+    if (imgEl) {
+      const imagePath = baseUrl ? `${baseUrl}${project.image}` : project.image;
+      imgEl.src = imagePath;
+      imgEl.alt = project.title;
+    }
+
+    linkEls.forEach((linkEl) => {
+      if (linkEl) linkEl.href = project.link;
+    });
+    if (linkBtnEl) linkBtnEl.href = project.link;
+
+    const progress = ((index + 1) / projects.length) * 100;
+    if (progressEl) progressEl.style.width = `${progress}%`;
+
+    const techContainer = document.querySelector(".project-tech-container");
+    if (techContainer) {
+      techContainer.innerHTML = project.technologies
+        .map((tech) => {
+          const colors = techColors[tech] || {
+            bg: 'bg-gray-900/10 dark:bg-gray-400/10',
+            text: 'text-gray-900 dark:text-gray-400',
+            border: 'border-gray-900/20 dark:border-gray-400/20',
+          };
+          return `
+            <span class="px-3 py-1 text-sm font-medium rounded-full border backdrop-blur-sm transition-all duration-300 ${colors.bg} ${colors.text} ${colors.border} hover:scale-105">
+              ${tech}
+            </span>`;
+        })
+        .join("");
+    }
+  }
+
+  document.querySelector(".prev-project")?.addEventListener("click", () => {
+    currentProjectIndex =
+      (currentProjectIndex - 1 + projects.length) % projects.length;
+    updateProject(currentProjectIndex);
+  });
+
+  document.querySelector(".next-project")?.addEventListener("click", () => {
+    currentProjectIndex = (currentProjectIndex + 1) % projects.length;
+    updateProject(currentProjectIndex);
+  });
+
+  updateProject(0);
+</script>

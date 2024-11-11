@@ -1,0 +1,303 @@
+---
+import CardWrapper from "../ui/CardWrapper.astro";
+---
+
+<CardWrapper class="lg:row-span-1">
+  <div class="grid grid-cols-1 gap-4">
+    <!-- Bitcoin Price -->
+    <div
+      class="flex flex-row bg-white dark:bg-tertiary shadow-sm rounded-xl p-4"
+    >
+      <div class="flex flex-col flex-grow">
+        <div class="flex items-center justify-between">
+          <span
+            class="inline-block rounded-full text-black dark:text-white ring-2 ring-black dark:ring-white text-xs font-bold px-4 py-1"
+          >
+            BTC
+          </span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">Live</span>
+        </div>
+        <div class="mt-2 flex items-center justify-between">
+          <div
+            class="font-bold text-lg text-primary dark:text-white"
+            data-btc-price
+          >
+            Loading...
+          </div>
+          <span class="text-green-500" data-btc-change>--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ethereum Price -->
+    <div
+      class="flex flex-row bg-white dark:bg-tertiary shadow-sm rounded-xl p-4"
+    >
+      <div class="flex flex-col flex-grow">
+        <div class="flex items-center justify-between">
+          <span
+            class="inline-block rounded-full text-black dark:text-white ring-2 ring-black dark:ring-white text-xs font-bold px-4 py-1"
+          >
+            ETH
+          </span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">Live</span>
+        </div>
+        <div class="mt-2 flex items-center justify-between">
+          <div
+            class="font-bold text-lg text-primary dark:text-white"
+            data-eth-price
+          >
+            Loading...
+          </div>
+          <span class="text-green-500" data-eth-change>--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Global Flights -->
+    <div
+      class="flex flex-row bg-white dark:bg-tertiary shadow-sm rounded-xl p-4"
+    >
+      <div class="flex flex-col flex-grow">
+        <div class="flex items-center justify-between">
+          <span
+            class="inline-block rounded-full text-black dark:text-white ring-2 ring-black dark:ring-white text-xs font-bold px-4 py-1"
+          >
+            ✈️ Flights in Air
+          </span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">Live</span>
+        </div>
+        <div class="mt-2 flex items-center justify-between">
+          <div
+            class="font-bold text-lg text-primary dark:text-white"
+            data-flights
+          >
+            Loading...
+          </div>
+          <span class="text-xs text-blue-500 animate-pulse">Active</span>
+        </div>
+        <div
+          class="mt-2 text-xs text-zinc-500 dark:text-zinc-400 italic"
+          data-flights-update
+        >
+          Last updated: --
+        </div>
+      </div>
+    </div>
+  </div>
+</CardWrapper>
+
+<script>
+  function formatPrice(price) {
+    if (!price || isNaN(price)) return "Loading...";
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(price);
+  }
+
+  function formatChange(change) {
+    if (!change || isNaN(change)) return "--";
+    const sign = change >= 0 ? "▲" : "▼";
+    return `${sign} ${Math.abs(change).toFixed(2)}%`;
+  }
+
+  async function fetchCryptoPrice(coin) {
+    try {
+      // Try CoinGecko API first
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd&include_24h_change=true`
+      );
+      const data = await response.json();
+      return data[coin];
+    } catch (error) {
+      // Fallback to Binance API
+      const symbol = coin === "bitcoin" ? "BTCUSDT" : "ETHUSDT";
+      const response = await fetch(
+        `https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`
+      );
+      const data = await response.json();
+      return {
+        usd: parseFloat(data.lastPrice),
+        usd_24h_change: parseFloat(data.priceChangePercent),
+      };
+    }
+  }
+
+  async function updateData() {
+    try {
+      // Update Bitcoin
+      const btcData = await fetchCryptoPrice("bitcoin");
+      const btcPrice = document.querySelector("[data-btc-price]");
+      const btcChange = document.querySelector("[data-btc-change]");
+
+      if (btcPrice && btcChange && btcData) {
+        btcPrice.classList.add("fade-out");
+        setTimeout(() => {
+          btcPrice.textContent = formatPrice(btcData.usd);
+          btcPrice.classList.remove("fade-out");
+        }, 150);
+
+        btcChange.classList.add("fade-out");
+        setTimeout(() => {
+          btcChange.textContent = formatChange(btcData.usd_24h_change);
+          btcChange.className =
+            btcData.usd_24h_change >= 0 ? "text-green-500" : "text-red-500";
+          btcChange.classList.remove("fade-out");
+        }, 150);
+      }
+
+      // Update Ethereum
+      const ethData = await fetchCryptoPrice("ethereum");
+      const ethPrice = document.querySelector("[data-eth-price]");
+      const ethChange = document.querySelector("[data-eth-change]");
+
+      if (ethPrice && ethChange && ethData) {
+        ethPrice.classList.add("fade-out");
+        setTimeout(() => {
+          ethPrice.textContent = formatPrice(ethData.usd);
+          ethPrice.classList.remove("fade-out");
+        }, 150);
+
+        ethChange.classList.add("fade-out");
+        setTimeout(() => {
+          ethChange.textContent = formatChange(ethData.usd_24h_change);
+          ethChange.className =
+            ethData.usd_24h_change >= 0 ? "text-green-500" : "text-red-500";
+          ethChange.classList.remove("fade-out");
+        }, 150);
+      }
+
+      // Update flights
+      const flightsResponse = await fetch(
+        "https://opensky-network.org/api/states/all"
+      );
+      const flightsData = await flightsResponse.json();
+
+      const flightsElement = document.querySelector("[data-flights]");
+      const flightsUpdate = document.querySelector("[data-flights-update]");
+
+      if (flightsElement && flightsUpdate && flightsData.states) {
+        flightsElement.classList.add("fade-out");
+        setTimeout(() => {
+          const activeFlights = flightsData.states.length.toLocaleString();
+          flightsElement.textContent = activeFlights;
+          flightsElement.classList.remove("fade-out");
+        }, 150);
+
+        flightsUpdate.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  // Initial update
+  updateData();
+
+  // Update every 5 seconds
+  const updateInterval = setInterval(updateData, 5000);
+
+  // Cleanup
+  document.addEventListener("astro:before-swap", () => {
+    if (updateInterval) {
+      clearInterval(updateInterval);
+    }
+  });
+</script>
+
+<style>
+  .fade-out {
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+  }
+
+  [data-btc-price],
+  [data-btc-change],
+  [data-eth-price],
+  [data-eth-change],
+  [data-flights] {
+    opacity: 1;
+    transition: opacity 0.15s ease-in-out;
+  }
+
+  .text-gray-400 {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  #darkmode-toggle {
+    display: none;
+  }
+
+  label {
+    background: #f1f1f1;
+    width: 120px;
+    height: 50px;
+    border-radius: 100px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    overflow: hidden;
+  }
+
+  .sun {
+    width: 35px;
+    height: 35px;
+    fill: #ffd43b;
+    transform: translateX(0);
+    transition: all 0.3s ease;
+  }
+
+  .moon {
+    width: 35px;
+    height: 35px;
+    fill: #f1f1f1;
+    position: absolute;
+    right: 8px;
+    transform: translateX(100px);
+    transition: all 0.3s ease;
+  }
+
+  #darkmode-toggle:checked + label {
+    background: #374151;
+    border-color: #374151;
+  }
+
+  #darkmode-toggle:checked + label .sun {
+    transform: translateX(-100px);
+  }
+
+  #darkmode-toggle:checked + label .moon {
+    transform: translateX(0);
+  }
+
+  /* Dark mode styles */
+  :global(.dark) label {
+    background: #374151;
+    border-color: #374151;
+  }
+
+  :global(.dark) .sun {
+    transform: translateX(-100px);
+  }
+
+  :global(.dark) .moon {
+    transform: translateX(0);
+  }
+</style>

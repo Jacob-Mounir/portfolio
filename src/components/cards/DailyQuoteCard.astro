@@ -1,0 +1,104 @@
+---
+import CardWrapper from "../ui/CardWrapper.astro";
+
+const quotes = [
+  {
+    content:
+      "Everything can be taken from a man but one thing: the last of human freedoms - to choose one's attitude in any given set of circumstances.",
+    author: "Viktor Frankl",
+  },
+  {
+    content: "Simplicity is the ultimate sophistication.",
+    author: "Leonardo da Vinci",
+  },
+  {
+    content: "Time is an illusion. Lunchtime doubly so.",
+    author: "Douglas Adams",
+  },
+  {
+    content: "The only way to do great work is to love what you do.",
+    author: "Steve Jobs",
+  },
+  {
+    content: "Stay hungry, stay foolish.",
+    author: "Stewart Brand",
+  },
+];
+
+// Get a random quote
+const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+---
+
+<CardWrapper>
+  <div class="flex flex-col">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-primary dark:text-white">
+        Daily Quote
+      </h2>
+      <button
+        id="refresh-quote"
+        class="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-tertiary transition-colors duration-200"
+        aria-label="Get new quote"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 text-primary dark:text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <blockquote
+      class="text-xl font-medium text-primary dark:text-white italic mb-4"
+      id="quote-text"
+    >
+      "{randomQuote.content}"
+    </blockquote>
+
+    <cite class="text-sm text-zinc-600 dark:text-zinc-400" id="quote-author">
+      — {randomQuote.author}
+    </cite>
+  </div>
+</CardWrapper>
+
+<script define:vars={{ quotes }}>
+  const quoteText = document.getElementById("quote-text");
+  const quoteAuthor = document.getElementById("quote-author");
+  const refreshButton = document.getElementById("refresh-quote");
+
+  function updateQuote() {
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    if (quoteText && quoteAuthor) {
+      quoteText.style.opacity = "0";
+      quoteAuthor.style.opacity = "0";
+
+      setTimeout(() => {
+        quoteText.textContent = `"${randomQuote.content}"`;
+        quoteAuthor.textContent = `— ${randomQuote.author}`;
+
+        quoteText.style.opacity = "1";
+        quoteAuthor.style.opacity = "1";
+      }, 300);
+    }
+  }
+
+  if (refreshButton) {
+    refreshButton.addEventListener("click", updateQuote);
+  }
+</script>
+
+<style>
+  #quote-text,
+  #quote-author {
+    transition: opacity 0.3s ease-in-out;
+  }
+</style>

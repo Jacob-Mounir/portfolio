@@ -1,0 +1,28 @@
+---
+import CardWrapper from '../ui/CardWrapper.astro';
+
+const skills = [
+  'JavaScript',
+  'TypeScript',
+  'React',
+  'Node.js',
+  'HTML',
+  'CSS',
+  'Tailwind',
+  'Git',
+  'Astro'
+];
+---
+
+<CardWrapper class="lg:row-span-1">
+  <h2 class="text-2xl font-bold text-primary dark:text-white mb-6">
+    Skills & Technologies
+  </h2>
+  <div class="flex flex-wrap gap-3">
+    {skills.map(skill => (
+      <span class="px-4 py-2 rounded-full text-sm font-medium bg-zinc-100 dark:bg-tertiary text-primary dark:text-white">
+        {skill}
+      </span>
+    ))}
+  </div>
+</CardWrapper>
